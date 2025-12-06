@@ -67,6 +67,34 @@ router.get('/me', authenticateToken, async (req, res) => {
     }
 });
 
+// Update current user profile
+router.put('/me', authenticateToken, async (req, res) => {
+    try {
+        const { name, phone, designation, profileImage } = req.body;
+        const updates = {};
+
+        if (name) updates.name = name;
+        if (phone) updates.phone = phone;
+        if (designation) updates.designation = designation;
+        if (profileImage) updates.profileImage = profileImage;
+
+        if (Object.keys(updates).length === 0) {
+            return res.status(400).json({ error: 'No updates provided' });
+        }
+
+        await updateItem(req.user.id, updates);
+
+        // Return updated user
+        const updatedUser = await getItem(req.user.id);
+        const { password: _, ...userWithoutPassword } = updatedUser;
+
+        res.json({ success: true, user: userWithoutPassword });
+    } catch (error) {
+        console.error('Update profile error:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
 // Get all users (for chat and assignments)
 router.get('/users', authenticateToken, async (req, res) => {
     try {
