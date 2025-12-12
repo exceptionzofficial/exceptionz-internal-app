@@ -89,7 +89,7 @@ app.use((req, res) => {
 
 // Start server
 app.listen(PORT, async () => {
-    console.log(`\n🚀 Exceptionz Backend Server`);
+    console.log(`\n🚀 Exceptionz Backend Server running`);
     console.log(`================================`);
     console.log(`Server running on port ${PORT}`);
     console.log(`API Base: http://localhost:${PORT}/api`);
